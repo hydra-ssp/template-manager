@@ -20,6 +20,8 @@ var add_attr_url = "{{url_for('do_create_attr')}}"
    var save_template_url = "{{url_for('template_manager.do_update_template')}}"
    var template_id = {{template.template_id}};
 {%endif%}
+
+var attr_name_map = {{attr_id_name_map|safe}}
 </script>
 <h3>
     {%if not new%}
@@ -384,9 +386,8 @@ var add_attr_url = "{{url_for('do_create_attr')}}"
     </tbody>
 </table>
 
-
 {%include 'template_manager/attribute_modals.html'%}
-
+{%include 'template_manager/restriction_modal.html'%}
 
 <div class="modal fade" tabindex="-1" role="dialog" id="delete_type_modal">
   <div class="modal-dialog" role="document">
@@ -417,9 +418,12 @@ var add_attr_url = "{{url_for('do_create_attr')}}"
 <script type='text/javascript' src="{{url_for('static', filename='js/d3-tip.js')}}"></script>
 <script type='text/javascript' src="{{url_for('static', filename='js/plotly-latest.min.js')}}"></script>
 <script src="{{url_for('static', filename='js/_timeseries_graph.js')}}"></script>
+<script src="{{url_for('template_manager.static', filename='js/restrictions.js')}}"></script>
 
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('template_manager.static', filename='css/template.css') }}"/>
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/bootstrap-select.min.css') }}"/>
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/handsontable.full.min.css') }}"/>
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/pikaday.css') }}"/>
+
+
 {% endblock %}

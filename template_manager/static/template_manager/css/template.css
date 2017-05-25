@@ -48,3 +48,11 @@ table tr.header{
     overflow: none;
     height: auto;
 }
+
+#restriction-table{
+  width: 100%;
+}
+
+input.error {
+  border: 2px solid red;
+}

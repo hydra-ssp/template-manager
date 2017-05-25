@@ -74,6 +74,7 @@ def go_template(template_id):
                            new=False,
                            all_attrs=all_attributes,
                            attr_id_name_lookup=attr_id_name_lookup,
+                           attr_id_name_map=json.dumps(attr_id_name_lookup),#For the javascript
                            template=tmpl,
                            attr_dimen_lookup=attr_dimen_lookup,
                             typeattr_lookup=typeattr_lookup)

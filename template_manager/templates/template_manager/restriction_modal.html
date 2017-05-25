@@ -1,0 +1,49 @@
+<div class="modal fade" tabindex="-1" role="dialog" id="restriction-modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">{{_('Manage Value Restrictions')}} (<span class="attr-name"></span>)</h4>
+      </div>
+      <div class="modal-body">
+          <form id="restriction-container" action="create_attr" type="POST">
+            <input type="hidden" name="restriction-id" value="" class="restriction-id">
+            <select id='restriction-select' class="selectpicker" title="Add a restriction">
+              <option value='BOOL10'>{{_('Boolean')}}</option>
+              <option value='ENUM'>{{_('Enumerate')}}</option>
+              <option value='VALUERANGE'>{{_('Value Range')}}</option>
+            </select>
+            <span id="add-restriction" class="btn btn-default btn-sm"><span class="fa fa-plus"></span></span>
+            <table id="restriction-table" class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>{{_('Restriction')}}</th>
+                  <th>{{_('Enter a comma-separated list')}}</th>
+                  <th></th>
+                </tr>
+              </thead>
+            </table>
+            <table id="restriction-template" class="hidden">
+              <tr class='restriction'>
+                <td class='restriction-name'>
+                </td>
+                <td class='restriction-data'>
+                  <input class='restriction-text' type="text"></input>
+                </td>
+                <td class='restriction-delete'>
+                  <div class='btn btn-sm btn-danger'>
+                    <span class="fa fa-trash"></div>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </form>
+      </div>
+      <div class="modal-footer">
+          <button type="button" id="close-restrictions-button" class="btn btn-default" data-dismiss="modal">{{_('Close')}}</button>
+          <button type="button" id="save-restrictions-button" class="btn btn-success" data-dismiss="modal">{{_('Save')}}</button>
+        <!-- <button type="button" class="btn btn-primary">Save changes</button>-->
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

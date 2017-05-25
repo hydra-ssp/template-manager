@@ -15,7 +15,7 @@
             <td class="defautvaluecontainer dataset">
                 <input type="hidden" name="attr_id" value={{ta.attr_id|int}} >
                 <input type="hidden" name="attr_name" value="{{attr_id_name_lookup[ta.attr_id]}}"></input>
-                <input name="value" type="" 
+                <input name="value" type=""
                     {%if ta.data_type%}
                         class="{{ta.data_type}}"
                     {%endif%}
@@ -24,11 +24,25 @@
                     {%endif%}
                     >
                 </input>
-                <input name="metadata" type="hidden" 
+                <input name="metadata" type="hidden"
                     {%if ta.default_dataset and ta.default_dataset.metadata%}
                         value={{ta.default_dataset.metadata.as_json()}}
                         {%endif%}>
                 </input>
+            </td>
+            <td>
+                  <input id="{{resourcetype.resource_type}}-{{ta.attr_id|int}}-restriction"
+                      class="attr-restriction"
+                      type="hidden"
+                      name="attr_restrictions"
+                      value="{%if ta.data_restriction%}{{ta.data_restriction}}{%else%}{}{%endif%}">
+                  </input>
+                  <div target="{{resourcetype.resource_type}}-{{ta.attr_id|int}}-restriction"
+                        data-toggle="modal"
+                        data-target="#restriction-modal"
+                        class="attr-restriction-btn btn btn-default btn-sm">
+                  <span class="fa fa-edit"></span>
+              </div>
             </td>
         </tr>
     {%endfor%}

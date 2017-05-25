@@ -4,70 +4,70 @@ $(document).ready(function(){
     $('#templatetable .typeattrs.selectpicker').selectpicker({
        // style: 'btn-info',
         liveSearch:true
-    }); 
+    });
 
 
     $('#templatetable .selectpicker').selectpicker({
-    }); 
+    });
 
-    
+
 })
 
 $(document).on('click', "#addnodetype", function(event){
-    event.preventDefault(); 
+    event.preventDefault();
 
     var nodetyperow = $("#nodetypetemplate tr:first").clone();
 
     nodetyperow.addClass('nodetype');
     $("select",nodetyperow).addClass('selectpicker');
-    
+
     $("#templatetable tbody.nodetypes").append(nodetyperow);
 
     $('.typeattrs.selectpicker', nodetyperow).selectpicker({
         liveSearch:true
-    }); 
+    });
 
     $('.selectpicker', nodetyperow).selectpicker({
-    }); 
+    });
 
 })
 
 $(document).on('click', "#addlinktype", function(event){
-    event.preventDefault(); 
+    event.preventDefault();
 
     var linktyperow = $("#linktypetemplate tr:first").clone();
     $("select",linktyperow).addClass('selectpicker');
 
     linktyperow.addClass('linktype');
-    
+
     $("#templatetable tbody.linktypes").append(linktyperow);
 
     $('.typeattrs.selectpicker', linktyperow).selectpicker({
        // style: 'btn-info',
         liveSearch:true
-    }); 
+    });
     $('.selectpicker', linktyperow).selectpicker({
-    }); 
+    });
 
 
 
 })
 $(document).on('click', "#addgrouptype", function(event){
-    event.preventDefault(); 
+    event.preventDefault();
 
     var grouptyperow = $("#grouptypetemplate tr:first").clone();
     $("select",grouptyperow).addClass('selectpicker');
 
     grouptyperow.addClass('grouptype');
-    
+
     $("#templatetable tbody.grouptypes").append(grouptyperow);
 
     $('.typeattr .selectpicker', grouptyperow).selectpicker({
        // style: 'btn-info',
         liveSearch:true
-    }); 
+    });
     $('.selectpicker', grouptyperow).selectpicker({
-    }); 
+    });
 
 
 })
@@ -83,7 +83,7 @@ $(document).on('change', 'select.data_types', function(event){
     val_input.removeClass('descriptor scalar array timeseries');
 
     val_input.addClass(data_type);
-    
+
     updateInputs()
 
 })
@@ -92,7 +92,7 @@ $(document).on('change', 'select.typeattrs', function(event){
 
 
     var row = $(this).closest('.resourcetype');
-    
+
     var attrdetails = $("tbody.attributedetails", row);
 
     var selected = $(this).val()
@@ -113,13 +113,13 @@ $(document).on('change', 'select.typeattrs', function(event){
         var attr_id = selected[i]
         var attr = $("option[value="+attr_id+"]", row)
         var attr_name   = attr.text()
-        
+
         var attr_row = $(".attributedetail.attr-"+attr_id, row)
 
         if (attr_row.length == 0){
             var row_tmpl = $("#attrdetailstemplate tr.attributedetail").clone();
             row_tmpl.addClass('attr-'+attr_id);
-        
+
             $('td.attr-name', row_tmpl).text(attr_name);
             $('input[name="attr_name"]', row_tmpl).val(attr_name);
             $('input[name="attr_id"]', row_tmpl).val(attr_id);
@@ -149,10 +149,10 @@ $(document).on("click", "#save-template-button", function(event){
         }
         var type_id=null;
         if ($(this).attr('id') != undefined){
-            templatetype['id'] = type_id 
+            templatetype['id'] = type_id
             type_id=$(this).attr('id');
         }
-        templatetype['id'] = type_id 
+        templatetype['id'] = type_id
 
         var t = $(this)
         if (t.hasClass("nodetype")){
@@ -166,13 +166,14 @@ $(document).on("click", "#save-template-button", function(event){
         }
 
         $("input",this).each(function(){
-            var name = $(this).attr('name') 
-            var value = $(this).val() 
+            var name = $(this).attr('name')
+            var value = $(this).val()
             templatetype[name] = value
 
         })
-        
+
         var layout = getLayout(row)
+
 
         templatetype.layout = JSON.stringify(layout)
 
@@ -193,6 +194,9 @@ $(document).on("click", "#save-template-button", function(event){
                 ta['default_dataset_id'] = default_value.dataset_id
             }
 
+            var restriction = getRestriction(attr_id, row)
+            ta['data_restriction'] = restriction
+
             var details = $('.attr-'+attr_id, row)
             var is_var = $(".attr-"+attr_id+" input[name='is_var']", row)
 
@@ -205,12 +209,12 @@ $(document).on("click", "#save-template-button", function(event){
             typeattrs.push(ta)
         })
         templatetype.typeattrs = typeattrs
-        
+
         data.types.push(templatetype)
     })
-    
+
     var success = function(resp){
-        $("#close-create-attr-button").click() 
+        $("#close-create-attr-button").click()
         var newtmpl = JSON.parse(resp)
         location.href="/template/"+newtmpl.template_id
     }
@@ -252,6 +256,21 @@ var getDefaultValue = function(attr_id, row){
 
 }
 
+var getRestriction = function(attr_id, row){
+    var restriction = null
+
+    var details = $('.attr-'+attr_id, row)
+
+    var restriction = $("input.attr-restriction", details).val()
+
+    if (restriction != "" && restriction != "{}"){
+        return $.trim(restriction);
+    }else{
+        return null;
+    }
+
+}
+
 var getLayout = function(element){
     var layout = {}
     var color = $(".colorpicker", element).val()
@@ -275,7 +294,7 @@ var getLayout = function(element){
 }
 
 $(document).on('click', '.toggleattributedetails', function(){
-    
+
     var s = $('span', this)
 
     var resourcerow = $(this).closest('tr');
@@ -295,12 +314,12 @@ $(document).on('click', '.toggleattributedetails', function(){
 })
 
 $(document).on('click', ".togglesection", function(){
-    
+
     var tbody = $(this).closest('tbody')
 
 
     $('.resourcetype', tbody).toggle()
-    
+
     var icon = $('span', this)
 
     if (icon.hasClass('fa-plus')){
