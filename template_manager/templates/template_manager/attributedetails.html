@@ -20,13 +20,13 @@
                         class="{{ta.data_type}}"
                     {%endif%}
                     {%if ta.default_dataset%}
-                        value={{ta.default_dataset.value|safe}}
+                        value="{{ta.default_dataset.value|safe}}"
                     {%endif%}
                     >
                 </input>
                 <input name="metadata" type="hidden"
                     {%if ta.default_dataset and ta.default_dataset.metadata%}
-                        value={{ta.default_dataset.metadata.as_json()}}
+                        value="{{ta.default_dataset.metadata.as_json()}}"
                         {%endif%}>
                 </input>
             </td>

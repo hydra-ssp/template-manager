@@ -3,7 +3,9 @@ d3.selectAll('.attr-restriction-btn').on('click', function(){
   var td = btn.node().parentNode;
   var tr = td.parentNode;
   var attr_name = d3.select(tr).select("input[name='attr_name']").property('value');
+  var data_type = d3.select(tr).select("select.data_types").property('value')
   d3.select('#restriction-modal .attr-name').text(attr_name);
+  d3.select('#restriction-modal input.data_type').property('value', data_type);
   d3.select('#restriction-modal .restriction-id').property('value', btn.attr('target'))
 
   var curr_restriction = JSON.parse(d3.select(td).select('input').property('value'))
@@ -81,12 +83,28 @@ d3.select("#save-restrictions-button").on('click', function(){
         input.classed('error', true)
         all_inputs_valid = false;
       }else{
+
+        var data_type = d3.select('#restriction-modal input.data_type').property('value')
         input.classed('error', false)
         var row = input.node().parentNode.parentNode
         var restriction_type = row.classList[0];
         //A comma-sepearated list must be json serialisable.
         try{
-          var value = JSON.parse("[" + input.property('value') + "]");
+          if (data_type == 'descriptor'){
+            var value = input.property('value');
+            var splitval = value.split(',');
+            var strval = '[';
+            splitval.forEach(function(v, i){
+                strval = strval + '"'+v+'"'
+                if (i != splitval.length-1){
+                    strval = strval + ','
+                }
+            })
+            strval = strval + ']';
+            value = JSON.parse(strval);
+          }else{
+            var value = JSON.parse("[" + input.property('value') + "]");
+          }
         }catch(Error){
           input.classed('error', true)
           all_inputs_valid = false;
