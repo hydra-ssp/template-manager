@@ -135,11 +135,34 @@ $(document).on("click", "#save-template-button", function(event){
     event.preventDefault();
 
     var formdata = $("#templatetable").serializeArray();
+
+    var shadow_attributes = $("#shadow-attributes").val()
+    var save_shadow_attributes = []
+    var sa_table = $("#shadow-attribute-details .shadow-attribute-detail").each(function(){
+        var row = $(this)
+        var attr_id = row.attr('attr_id') 
+        var op      = $('select[name="operation"]', row).val()
+        var threshold = $("input[name='threshold']", row).val()
+        save_shadow_attributes.push({'attr_id':attr_id, 'operation':op,'threshold':threshold})
+    })
+
+    var quick_attributes = $("#quick-attributes").val()
+    
+    var save_quick_attributes = []
+    if (quick_attributes != null){
+        for (var i=0; i< quick_attributes.length; i++){
+            var attr_id = quick_attributes[i]
+            save_quick_attributes.push({'attr_id':attr_id})
+        }
+    }
+
     var data = {
         id:template_id,
         name: $("input[name='template_name']").val(),
         description: $("input[name='template_description']").val(),
-        types: []
+        types: [],
+        shadow_attributes: save_shadow_attributes,
+        quick_attributes: save_quick_attributes,
     }
 
     $("#templatetable .resourcetype").each(function(){
@@ -330,4 +353,30 @@ $(document).on('click', ".togglesection", function(){
         icon.addClass('fa-plus')
     }
 
+})
+
+$(document).on('change', "#shadow-attributes", function(){
+    var table = $('#shadow-attribute-details')
+    var attr_ids = $("#shadow-attributes").val()
+    $('.shadow-attribute-detail', table).each(function(){
+        var attr_id = $(this).attr('attr_id')
+        if (attr_ids.indexOf(attr_id) == -1){
+            $(this).remove()
+        }
+    })
+
+   attr_ids.forEach(function(attr_id){
+        if ($('tr.'+attr_id, table).length == 1){
+           return 
+        }else{
+            var newrow = $('.shadow-attribute-detail-template', table).clone()
+            newrow.removeClass("shadow-attribute-detail-template")
+            newrow.addClass("shadow-attribute-detail "+attr_id)
+            newrow.attr("attr_id", attr_id)
+            newrow.show()
+            $('.attribute-name', newrow).text(attr_name_map[attr_id])
+            table.append(newrow)
+
+        }
+    })
 })

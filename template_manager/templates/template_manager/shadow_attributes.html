@@ -1,0 +1,62 @@
+<!--shadow-attributes-->
+<label for="shadow-attributes">{{_('Shadow Attributes')}}</label>
+<select id="shadow-attributes" name="shadow-attributes" class='selectpicker' multiple>
+    {%for sa in shadow_attributes%}
+        <option value="{{sa.attr_id}}" selected>{{attr_id_name_lookup[sa.attr_id]}}
+    {%endfor%}
+
+    {%for a in all_attrs%}
+        {%if a.attr_id not in shadow_attribute_ids%}
+            <option value="{{a.attr_id}}">{{attr_id_name_lookup[a.attr_id]}}
+        {%endif%}
+
+    {%endfor%}
+</select>
+
+<table id="shadow-attribute-details">
+    <tr class='header'>
+    <th>
+        {{_('Attribute')}}
+    </th>
+    <th>
+        {{_('Operation')}}
+    </th>
+    <th>
+        {{_('Threshold')}}
+    </th>
+    <tr>
+
+    <tr class="shadow-attribute-detail-template" style="display:none">
+        <td class="attribute-name"></td>
+        <td class="operation">
+            <select name="operation">
+                <option value="eq">Equal To</option>
+                <option value="gt" selected>Greater Than</option>
+                <option value="gte">Greater Than or Equal To</option>
+                <option value="lt">Less Than</option>
+                <option value="lte">Less Than or Equal To</option>
+            </select>
+        </td>
+        <td>
+            <input name="threshold" value="0"></input>
+        </td>
+    <tr>
+    {%for sa in shadow_attributes%}
+
+    <tr class="shadow-attribute-detail {{sa.attr_id}}" attr_id='{{sa.attr_id}}'>
+            <td class="attribute-name">{{attr_id_name_lookup[sa.attr_id]}}</td>
+            <td class="operation">
+                <select name="operation">
+                    <option value="eq"  {%if sa.operation.value=='eq'%}selected{%endif%}>Equal To</option>
+                    <option value="gt"  {%if sa.operation.value=='gt'%}selected{%endif%}>Greater Than</option>
+                    <option value="gte" {%if sa.operation.value=='gte'%}selected{%endif%}>Greater Than or Equal To</option>
+                    <option value="lt"  {%if sa.operation.value=='lt'%}selected{%endif%}>Less Than</option>
+                    <option value="lte" {%if sa.operation.value=='lte'%}selected{%endif%}>Less Than or Equal To</option>
+                </select>
+            </td>
+            <td>
+                <input name="threshold" value="{{sa.threshold}}"></input>
+            </td>
+        </tr>
+    {%endfor%}
+</table>

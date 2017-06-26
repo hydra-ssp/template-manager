@@ -1,0 +1,13 @@
+<!--quick-view-attributes-->
+<label for="shadow-attributes">{{_('Quick-view Attributes')}}</label>
+<select id="quick-attributes" class='selectpicker' name="quick-attributes" multiple>
+    {%for sa in quick_attributes%}
+        <option value="{{sa.attr_id}}" selected>{{attr_id_name_lookup[sa.attr_id]}}
+    {%endfor%}
+
+    {%for a in all_attrs%}
+        {%if a.attr_id not in quick_attribute_ids%}
+            <option value="{{a.attr_id}}">{{attr_id_name_lookup[a.attr_id]}}
+        {%endif%}
+    {%endfor%}
+</select>

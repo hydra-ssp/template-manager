@@ -37,6 +37,15 @@ var attr_name_map = {{attr_id_name_map|safe}}
             <tr class=""><td></td><td class="header">{{_('Template Name')}}</td><td><input name="template_name"
                     value="{%if not new%}{{template.template_name}}{%endif%}"
                         type="text"></input></td></tr>
+            <tr>
+                <td>
+                <td>
+                    {%include 'template_manager/shadow_attributes.html'%}
+                </td>
+                <td>
+                    {%include 'template_manager/quick_attributes.html'%}
+                </td>
+            </tr>
                 <tr class="header">
                     <td class='togglesection'><span class="fa fa-minus"></span></td>
                     <td>{{_('Network Details')}}</td>

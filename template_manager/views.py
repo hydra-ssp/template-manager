@@ -16,7 +16,11 @@ import hwi.hydrautils.template_utilities as tmplutils
 
 from . import templatemanager
 
-from hwi import app, db_connection
+from hwi import app, db, db_connection,\
+                    get_shadow_attributes,\
+                    save_shadow_attributes,\
+                    get_quick_attributes,\
+                    save_quick_attributes
 
 @templatemanager.route('/templates', methods=['GET'])
 @db_connection
@@ -38,10 +42,22 @@ def do_get_all_templates():
 @db_connection
 @login_required
 def go_new_template():
+
     all_attributes = attrutils.get_all_attributes()
+
+    attr_id_name_lookup = dict([(a.attr_id, a.attr_name) for a in all_attributes])
+    attr_dimen_lookup = dict([(a.attr_id, a.attr_dimen) for a in all_attributes])
     return render_template('template_manager/template.html',
-                                new=True,
+                              new=True,
                               all_attrs=all_attributes,
+                              attr_id_name_lookup=attr_id_name_lookup,
+                              attr_id_name_map=json.dumps(attr_id_name_lookup),#For the javascript
+                              attr_dimen_lookup=attr_dimen_lookup,
+                              typeattr_lookup={},
+                              shadow_attributes = [],
+                              shadow_attribute_ids = [],
+                              quick_attributes = [],
+                              quick_attribute_ids = [],
                           )
 
 @templatemanager.route('/template/<template_id>', methods=['GET'])
@@ -64,7 +80,11 @@ def go_template(template_id):
     attr_id_name_lookup = dict([(a.attr_id, a.attr_name) for a in all_attributes])
     attr_dimen_lookup = dict([(a.attr_id, a.attr_dimen) for a in all_attributes])
 
-    app.logger.info(tmpl)
+    shadow_attributes = get_shadow_attributes(template_id)
+    shadow_attribute_ids = [a.attr_id for a in shadow_attributes]
+    quick_attributes  = get_quick_attributes(template_id)
+    quick_attribute_ids  = [a.attr_id for a in quick_attributes] 
+
     return render_template('template_manager/template.html',
                            new=False,
                            all_attrs=all_attributes,
@@ -72,7 +92,11 @@ def go_template(template_id):
                            attr_id_name_map=json.dumps(attr_id_name_lookup),#For the javascript
                            template=tmpl,
                            attr_dimen_lookup=attr_dimen_lookup,
-                            typeattr_lookup=typeattr_lookup)
+                           shadow_attributes = shadow_attributes,
+                           shadow_attribute_ids = shadow_attribute_ids,
+                           quick_attributes = quick_attributes,
+                           quick_attribute_ids = quick_attribute_ids,
+                           typeattr_lookup=typeattr_lookup)
 
 @templatemanager.route('/create_template', methods=['POST'])
 @db_connection
@@ -125,14 +149,19 @@ def do_load_template():
 def do_update_template():
 
     user_id = current_user.id
-
+    
     d = json.loads(request.get_data())
 
     template_j = JSONObject(d)
 
     newtemplate = tmplutils.update_template(template_j, user_id)
 
+    save_quick_attributes(newtemplate.template_id, template_j.quick_attributes)
+    save_shadow_attributes(newtemplate.template_id, template_j.shadow_attributes)
+
     commit_transaction()
+
+    db.session.commit()
 
     return newtemplate.as_json()
 
@@ -143,7 +172,7 @@ def do_delete_template(template_id):
 
     user_id = current_user.id
 
-    status = delete_template(template_id, user_id)
+    status = tmplutils.delete_template(template_id, user_id)
 
     commit_transaction()
 
