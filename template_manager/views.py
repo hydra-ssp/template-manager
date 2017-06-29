@@ -1,27 +1,18 @@
 from flask import  request, session, redirect, url_for, escape, send_file, jsonify, Markup
 import json
 
-from hydra_base.exceptions import HydraError, PermissionError, ResourceNotFoundError
-
-from hydra_base.util.hydra_dateutil import ordinal_to_timestamp
-
 from flask import render_template
 
-from werkzeug import secure_filename
-import zipfile
 import os
-import sys
 import datetime
-import urllib2
 
 basefolder = os.path.dirname(__file__)
 
-from hydra_base.lib.objects import JSONObject, ResourceScenario
-from hydra_base.db import commit_transaction, rollback_transaction, DBSession
+from hydra_base.lib.objects import JSONObject
+from hydra_base.db import commit_transaction
 
 import hwi.hydrautils.attr_utilities as attrutils
 import hwi.hydrautils.template_utilities as tmplutils
-import hwi.hydrautils.dataset_utilities as datasetutils
 
 from . import templatemanager
 
