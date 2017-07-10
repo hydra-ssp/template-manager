@@ -1,4 +1,4 @@
-from flask import request, render_template
+from flask import request, render_template, session
 import json
 from flask_security import login_required
 from flask_login import current_user
@@ -26,7 +26,7 @@ from hwi import app, db, db_connection,\
 @db_connection
 @login_required
 def go_templates():
-    user_id = current_user.id
+    user_id = session['hydra_user_id']
     all_templates = tmplutils.get_all_templates(user_id)
     return render_template('template_manager/templates.html', templates=all_templates)
 
@@ -34,7 +34,7 @@ def go_templates():
 @db_connection
 @login_required
 def do_get_all_templates():
-    user_id = current_user.id
+    user_id = session['hydra_user_id']
     all_templates = tmplutils.get_all_templates(user_id)
     return all_templates
 
@@ -65,7 +65,7 @@ def go_new_template():
 @login_required
 def go_template(template_id):
 
-    user_id = current_user.id
+    user_id = session['hydra_user_id']
     all_attributes = attrutils.get_all_attributes()
     tmpl = tmplutils.get_template(template_id, user_id)
 
@@ -103,7 +103,7 @@ def go_template(template_id):
 @login_required
 def do_create_template():
 
-    user_id = current_user.id
+    user_id = session['hydra_user_id']
 
     d = json.loads(request.get_data())
 
@@ -127,7 +127,7 @@ def do_load_template():
     if not os.path.exists(basefolder):
         os.mkdir(basefolder)
 
-    user_id = current_user.id
+    user_id = session['hydra_user_id']
 
     template_file = request.files['import_file']
 
@@ -148,7 +148,7 @@ def do_load_template():
 @login_required
 def do_update_template():
 
-    user_id = current_user.id
+    user_id = session['hydra_user_id']
     
     d = json.loads(request.get_data())
 
@@ -170,7 +170,7 @@ def do_update_template():
 @login_required
 def do_delete_template(template_id):
 
-    user_id = current_user.id
+    user_id = session['hydra_user_id']
 
     status = tmplutils.delete_template(template_id, user_id)
 
