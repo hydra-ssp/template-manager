@@ -22,6 +22,9 @@
         {{_('Operation')}}
     </th>
     <th>
+        {{_('Calculation')}}
+    </th>
+    <th>
         {{_('Threshold')}}
     </th>
     <tr>
@@ -30,11 +33,18 @@
         <td class="attribute-name"></td>
         <td class="operation">
             <select name="operation">
-                <option value="eq">Equal To</option>
-                <option value="gt" selected>Greater Than</option>
-                <option value="gte">Greater Than or Equal To</option>
-                <option value="lt">Less Than</option>
-                <option value="lte">Less Than or Equal To</option>
+                <option value="eq">{{_('Equal To')}}</option>
+                <option value="gt" selected>{{_('Greater Than')}}</option>
+                <option value="gte">{{_('Greater Than or Equal To')}}</option>
+                <option value="lt">{{_('Less Than')}}</option>
+                <option value="lte">{{_('Less Than or Equal To')}}</option>
+            </select>
+        </td>
+        <td class="minmax">
+            <select name="minmax">
+                <option value="min" selected>{{_('Minimum')}}</option>
+                <option value="max">{{_('Maximum')}}</option>
+                <option value="average">{{_('Average')}}</option>
             </select>
         </td>
         <td>
@@ -47,11 +57,18 @@
             <td class="attribute-name">{{attr_id_name_lookup[sa.attr_id]}}</td>
             <td class="operation">
                 <select name="operation">
-                    <option value="eq"  {%if sa.operation.value=='eq'%}selected{%endif%}>Equal To</option>
-                    <option value="gt"  {%if sa.operation.value=='gt'%}selected{%endif%}>Greater Than</option>
-                    <option value="gte" {%if sa.operation.value=='gte'%}selected{%endif%}>Greater Than or Equal To</option>
-                    <option value="lt"  {%if sa.operation.value=='lt'%}selected{%endif%}>Less Than</option>
-                    <option value="lte" {%if sa.operation.value=='lte'%}selected{%endif%}>Less Than or Equal To</option>
+                    <option value="eq"  {%if sa.operation.value=='eq'%}selected{%endif%}>{{_('Equal To')}}</option>
+                    <option value="gt"  {%if sa.operation.value=='gt'%}selected{%endif%}>{{_('Greater Than')}}</option>
+                    <option value="gte" {%if sa.operation.value=='gte'%}selected{%endif%}>{{_('Greater Than or Equal To')}}</option>
+                    <option value="lt"  {%if sa.operation.value=='lt'%}selected{%endif%}>{{_('Less Than')}}</option>
+                    <option value="lte" {%if sa.operation.value=='lte'%}selected{%endif%}>{{_('Less Than or Equal To')}}</option>
+                </select>
+            </td>
+            <td class="minmax">
+                <select name="minmax">
+                    <option value="min" {%if sa.minmax.value=='min'%}selected{%endif%}>{{_('Minimum')}}</option>
+                    <option value="max" {%if sa.minmax.value=='max'%}selected{%endif%}>{{_('Maximum')}}</option>
+                    <option value="avg" {%if sa.minmax.value=='average'%}selected{%endif%}>{{_('Average')}}</option>
                 </select>
             </td>
             <td>

@@ -143,7 +143,8 @@ $(document).on("click", "#save-template-button", function(event){
         var attr_id = row.attr('attr_id') 
         var op      = $('select[name="operation"]', row).val()
         var threshold = $("input[name='threshold']", row).val()
-        save_shadow_attributes.push({'attr_id':attr_id, 'operation':op,'threshold':threshold})
+        var minmax = $("select[name='minmax']", row).val()
+        save_shadow_attributes.push({'attr_id':attr_id, 'operation':op,'threshold':threshold, 'minmax': minmax})
     })
 
     var quick_attributes = $("#quick-attributes").val()
