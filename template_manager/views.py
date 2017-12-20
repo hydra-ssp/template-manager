@@ -177,3 +177,19 @@ def do_delete_template(template_id):
     commit_transaction()
 
     return status
+
+
+@templatemanager.route('/delete_type', methods=['POST'])
+@db_connection
+@login_required
+def do_delete_type(type_id):
+    user_id = session['hydra_user_id']
+
+    status = tmplutils.delete_type(type_id, user_id)
+
+    commit_transaction()
+
+    return status
+
+
+

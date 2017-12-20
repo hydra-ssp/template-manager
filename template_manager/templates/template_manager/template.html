@@ -106,10 +106,10 @@ var attr_name_map = {{attr_id_name_map|safe}}
                     </tr>
             {%endif%}
         </tbody>
-        <tbody class="nodetypes">
+        <tbody class="resourcetypes nodetypes">
                 <tr class="header">
                     <td class='togglesection'><span class="fa fa-plus"></span></td>
-                    <td>{{_('Nodes')}}</td>
+                    <td class="section-heading">{{_('Nodes')}}</td>
                     <td>
                         <button id="addnodetype" type="button" class="btn btn-primary">
                             <span class="glyphicon glyphicon-plus"></span>
@@ -136,21 +136,20 @@ var attr_name_map = {{attr_id_name_map|safe}}
                                     {%include 'template_manager/typeattributes.html'%}
                                     <td class="typelayout">
                                         <select class="selectpicker shapeselector">
-                                            <option name="circle" {%if resourcetype.layout['shape'] == 'circle'%}selected=selected{%endif%}>{{_('Circle')}}</option>
-                                            <option name="diamond" {%if resourcetype.layout['shape'] == 'diamond'%}selected=selected{%endif%}>{{_('Diamond')}}</option>
-                                            <option name="cross" {%if resourcetype.layout['shape'] == 'cross'%}selected=selected{%endif%}>{{_('Cross')}}</option>
-                                            <option name="triangle" {%if resourcetype.layout['shape'] == 'triangle'%}selected=selected{%endif%}>{{_('Triangle')}}</option>
-                                            <option name="square" {%if resourcetype.layout['shape'] == 'square'%}selected=selected{%endif%}>{{_('Square')}}</option>
-                                            <option name="star"{%if resourcetype.layout['shape'] == 'star'%}selected=selected{%endif%}>{{_('Star')}}</option>
-                                            <option name="wye" {%if resourcetype.layout['shape'] == 'wye'%}selected=selected{%endif%}>{{_('Wye')}}</option>
+                                            <option name="circle" {%if resourcetype.layout.get('shape') == 'circle' or resourcetype.layout.get('shape')%}selected=selected{%endif%}>{{_('Circle')}}</option>
+                                            <option name="diamond" {%if resourcetype.layout.get('shape') == 'diamond'%}selected=selected{%endif%}>{{_('Diamond')}}</option>
+                                            <option name="cross" {%if resourcetype.layout.get('shape') == 'cross'%}selected=selected{%endif%}>{{_('Cross')}}</option>
+                                            <option name="triangle" {%if resourcetype.layout.get('shape') == 'triangle'%}selected=selected{%endif%}>{{_('Triangle')}}</option>
+                                            <option name="square" {%if resourcetype.layout.get('shape') == 'square'%}selected=selected{%endif%}>{{_('Square')}}</option>
+                                            <option name="star"{%if resourcetype.layout.get('shape') == 'star'%}selected=selected{%endif%}>{{_('Star')}}</option>
+                                            <option name="wye" {%if resourcetype.layout.get('shape') == 'wye'%}selected=selected{%endif%}>{{_('Wye')}}</option>
                                         </select>
 
-                                        <input class="colorpicker" type='color' value="{{resourcetype.layout['color']}}"></input>
+                                        <input class="colorpicker" type='color' value="{{resourcetype.layout.get('color', 'black')}}"></input>
                                     </td>
                                     <td class="deletetype">
-                                          <button type="button" class="btn btn-danger btn-small"
-                                            data-toggle="modal" data-target="#delete_type_modal">
-                                            <span class="glyphicon glyphicon-remove"></span>
+                                          <button type="button" class="delete-type-button btn btn-danger btn-small">
+                                                <span class="fa fa-trash"></span>
                                         </button>
                                     </td>
 
@@ -164,10 +163,10 @@ var attr_name_map = {{attr_id_name_map|safe}}
                 {%endfor%}
             {%endif%}
         </tbody>
-        <tbody class="linktypes">
+        <tbody class="resourcetypes linktypes">
         <tr class="header">
             <td class='togglesection'><span class="fa fa-plus"></span></td>
-            <td>{{_('Links')}}</td>
+            <td class="section-heading">{{_('Links')}}</td>
             <td>
                 <button id="addlinktype" type="button" class="btn btn-primary">
                     <span class="glyphicon glyphicon-plus"></span>
@@ -211,9 +210,8 @@ var attr_name_map = {{attr_id_name_map|safe}}
                                         </div>
                                     </td>
                                     <td class="deletetype">
-                                          <button type="button" class="btn btn-danger btn-small"
-                                            data-toggle="modal" data-target="#delete_type_modal">
-                                            <span class="glyphicon glyphicon-remove"></span>
+                                          <button type="button" class="delete-type-button btn btn-danger btn-small">
+                                                <span class="fa fa-trash"></span>
                                         </button>
                                     </td>
 
@@ -227,10 +225,10 @@ var attr_name_map = {{attr_id_name_map|safe}}
         {%endfor%}
         {%endif%}
         </tbody>
-        <tbody class="grouptypes">
+        <tbody class="resourcetypes grouptypes">
         <tr class="header">
             <td class='togglesection'><span class="fa fa-plus"></span></td>
-            <td>{{_('Groups')}}</td>
+            <td class="section-heading">{{_('Groups')}}</td>
             <td>
                 <button id="addgrouptype" type="button" class="btn btn-primary">
                     <span  class="glyphicon glyphicon-plus"></span>
@@ -255,9 +253,8 @@ var attr_name_map = {{attr_id_name_map|safe}}
                                     </td>
                                     {%include 'template_manager/typeattributes.html'%}
                                     <td class="deletetype">
-                                          <button type="button" class="btn btn-danger btn-small"
-                                            data-toggle="modal" data-target="#delete_type_modal">
-                                            <span class="glyphicon glyphicon-remove"></span>
+                                          <button type="button" class="delete-type-button btn btn-danger btn-small">
+                                            <span class="fa fa-trash"></span>
                                         </button>
                                     </td>
                                 </tr>
@@ -297,9 +294,8 @@ var attr_name_map = {{attr_id_name_map|safe}}
                         <input class="colorpicker" type='color'></input>
                     </td>
                     <td class="deletetype">
-                          <button type="button" class="btn btn-danger btn-small"
-                            data-toggle="modal" data-target="#delete_type_modal">
-                            <span class="glyphicon glyphicon-remove"></span>
+                          <button type="button" class="delete-type-button btn btn-danger btn-small">
+                              <span class="fa fa-trash"></span>
                         </button>
                     </td>
                 </tr>
@@ -335,9 +331,8 @@ var attr_name_map = {{attr_id_name_map|safe}}
                         </div>
                     </td>
                     <td class="deletetype">
-                          <button type="button" class="btn btn-danger btn-small"
-                            data-toggle="modal" data-target="#delete_type_modal">
-                            <span class="glyphicon glyphicon-remove"></span>
+                          <button type="button" class="btn btn-danger btn-small">
+                              <span class="fa fa-trash"></span>
                         </button>
                     </td>
                 </tr>
@@ -361,9 +356,8 @@ var attr_name_map = {{attr_id_name_map|safe}}
                         <input class="colorpicker" type='color'></input>
                     </td>
                     <td class="deletetype">
-                          <button type="button" class="btn btn-danger btn-small"
-                            data-toggle="modal" data-target="#delete_type_modal">
-                            <span class="glyphicon glyphicon-remove"></span>
+                          <button type="button" class="delete-type-button btn btn-danger btn-small">
+                            <span class="glyphicon glyphicon-trash"></span>
                         </button>
                     </td>
                 </tr>
@@ -388,34 +382,17 @@ var attr_name_map = {{attr_id_name_map|safe}}
             <td class="defautvaluecontainer dataset">
                 <input name="attr_id" type="hidden">
                 <input type="hidden" name="attr_name" class="attr-name" value=""></input>
-                <input name="value" type="number" class="scalar" value=""></input>
+                <input name="value" class="value" type="number" class="scalar" value=""></input>
                 <input name="metadata" type="hidden" value=""></input>
             </td>
         </tr>
     </tbody>
 </table>
 
+{%include 'dataset_modals.html'%}
 {%include 'template_manager/attribute_modals.html'%}
 {%include 'template_manager/restriction_modal.html'%}
-
-<div class="modal fade" tabindex="-1" role="dialog" id="delete_type_modal">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Are you sure?</h4>
-      </div>
-      <div class="modal-body">
-          {{_('This action will permanently remove this type from the template.')}}
-      </div>
-      <div class="modal-footer">
-        <button type="button" id="close-create-button" class="btn btn-default" data-dismiss="modal">{{_('Close')}}</button>
-        <button type="button" id="create-attr-button" class="btn btn-danger" data-dismiss="modal">{{_('Remove')}}</button>
-        <!-- <button type="button" class="btn btn-primary">Save changes</button>-->
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-
+{%include 'template_manager/type_modals.html'%}
 
 <script src="{{url_for('template_manager.static', filename='js/template.js')}}"></script>
 <script src="{{url_for('static', filename='js/handsontable.full.min.js')}}"></script>
@@ -426,9 +403,11 @@ var attr_name_map = {{attr_id_name_map|safe}}
 <script type='text/javascript' src="{{url_for('static', filename='js/d3.v4.min.js')}}"></script>
 <script type='text/javascript' src="{{url_for('static', filename='js/d3-tip.js')}}"></script>
 <script type='text/javascript' src="{{url_for('static', filename='js/plotly-latest.min.js')}}"></script>
+<script type='text/javascript' src="{{url_for('static', filename='js/ace/ace.js')}}" type="text/javascript" charset="utf-8"></script>
 <script src="{{url_for('static', filename='js/_timeseries_graph.js')}}"></script>
 <script src="{{url_for('template_manager.static', filename='js/restrictions.js')}}"></script>
 
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/attributes.css') }}"/>
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('template_manager.static', filename='css/template.css') }}"/>
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/bootstrap-select.min.css') }}"/>
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/handsontable.full.min.css') }}"/>

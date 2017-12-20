@@ -42,17 +42,14 @@ table tr.header{
     color:#000;
 }
 
-.ts_outer {
-    position: relative;
-    width: 100%;
-    overflow: none;
-    height: auto;
-}
-
 #restriction-table{
   width: 100%;
 }
 
 input.error {
   border: 2px solid red;
+}
+
+tr.pending-delete{
+    background-color: #f74242;
 }

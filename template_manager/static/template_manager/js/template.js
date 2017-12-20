@@ -29,7 +29,6 @@ $(document).on('click', "#addnodetype", function(event){
 
     $('.selectpicker', nodetyperow).selectpicker({
     });
-
 })
 
 $(document).on('click', "#addlinktype", function(event){
@@ -48,10 +47,8 @@ $(document).on('click', "#addlinktype", function(event){
     });
     $('.selectpicker', linktyperow).selectpicker({
     });
-
-
-
 })
+
 $(document).on('click', "#addgrouptype", function(event){
     event.preventDefault();
 
@@ -68,9 +65,48 @@ $(document).on('click', "#addgrouptype", function(event){
     });
     $('.selectpicker', grouptyperow).selectpicker({
     });
-
-
 })
+
+$(document).on('click', ".delete-type-button", function(event){
+    event.preventDefault();
+    if ($('span', this).hasClass('fa-trash')){
+        $(this).closest('tr.resourcetype').addClass('pending-delete')
+        $(this).closest('tr').addClass('pending-delete')
+        $('span', this).removeClass('fa-trash')
+        $('span', this).addClass('fa-undo')
+        set_section_unsaved($(this))
+    }else{
+        $(this).closest('tr.resourcetype').removeClass('pending-delete')
+        $(this).closest('tr').removeClass('pending-delete')
+        $('span', this).removeClass('fa-undo')
+        $('span', this).addClass('fa-trash')
+        set_section_saved($(this))
+    }
+})
+
+var set_section_unsaved = function(el){
+   /*Set the status of a section to be 'unsaved' so it's easy 
+   * for the user to idenfify if they need to save.
+   * The element must be a jquery object within the section in question*/
+    var types_section = el.closest('tbody.resourcetypes')
+    var title = $('.section-heading', types_section);
+    var text = title.text();
+    title.text(text + '*')
+}
+
+var set_section_saved = function(el){
+   /*Set the status of a section to be 'unsaved' so it's easy 
+   * for the user to idenfify if they need to save.
+   * The element must be a jquery object within the section in question*/
+    var types_section = el.closest('tbody.resourcetypes')
+    var title = $('.section-heading', types_section);
+    var text = title.text();
+    if (text.indexOf('*') > 0){
+        title.text(text.substring(0, text.indexOf('*')))
+    }
+}
+
+
 
 $(document).on('change', 'select.data_types', function(event){
 
@@ -168,9 +204,15 @@ $(document).on("click", "#save-template-button", function(event){
 
     $("#templatetable .resourcetype").each(function(){
         var row = this;
+
         var templatetype = {
             template_id:template_id
         }
+
+        if ($(this).hasClass('pending-delete')){
+            templatetype['delete'] = 'Y'
+        }
+
         var type_id=null;
         if ($(this).attr('id') != undefined){
             templatetype['id'] = type_id
