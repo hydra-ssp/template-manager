@@ -1,10 +1,11 @@
-from flask import request, render_template, session
+from flask import request, render_template, session, send_from_directory
 import json
 from flask_security import login_required
 from flask_login import current_user
 
 import os
 import datetime
+import tempfile
 
 basefolder = os.path.dirname(__file__)
 
@@ -123,13 +124,17 @@ def do_load_template():
 
     now = datetime.datetime.now().strftime("%y%m%d%H%M")
 
-    basefolder = os.path.join(os.path.dirname(os.path.realpath(__file__)), TEMPLATE_FOLDER, now)
+    template_folder = app.config.get('TEMPLATE_FOLDER', tempfile.gettempdir())
+    
+    basefolder = os.path.dirname(os.path.join(template_folder, now))
+
     if not os.path.exists(basefolder):
         os.mkdir(basefolder)
 
     user_id = session['hydra_user_id']
 
-    template_file = request.files['import_file']
+    template_file = request.files['template_file']
+    format = request.values['format']
 
     template_file.save(os.path.join(basefolder, template_file.filename))
 
@@ -137,7 +142,7 @@ def do_load_template():
     f_arr = f.readlines()
     text = ''.join(f_arr)
 
-    newtemplate = tmplutils.load_template(text, user_id)
+    newtemplate = tmplutils.load_template(text, format, user_id)
 
     commit_transaction()
 
@@ -192,4 +197,52 @@ def do_delete_type(type_id):
     return status
 
 
+@templatemanager.route('/downloadtemplate/<template_id>/<format>', methods=['GET'])
+@templatemanager.route('/downloadtemplate/', methods=['GET'])
+@db_connection
+@login_required
+def do_download_template(template_id, format):
+    """
+        Get a template as a file in the specified format.
+        if no format is given, the template will be returned by default in xml
+    """
+    if format is None or format.lower() == 'json':
+        return _get_template_as_json(template_id)
+    elif format.lower() == 'xml':
+        return _get_template_as_xml(template_id)
 
+def _get_template_as_json(template_id):
+    user_id = session['hydra_user_id']
+
+    template_dict  = tmplutils.get_template_as_dict(template_id, user_id)
+
+    tmpfolder = os.tempnam()
+    os.mkdir(tmpfolder)
+    outputname = '%s.json'%(template_dict['template'].name)
+    location = os.path.join(tmpfolder, outputname)
+
+    with open(location, 'w') as f:
+        f.write(json.dumps(template_dict))
+
+    app.logger.info("File export complete.")
+    
+    return send_from_directory(tmpfolder, outputname, as_attachment=True)
+
+def _get_template_as_xml(template_id):
+    user_id = session['hydra_user_id']
+
+    template_j = tmplutils.get_template(template_id, user_id)
+
+    template_xml_string = tmplutils.get_template_as_xml(template_id, user_id)
+
+    tmpfolder = os.tempnam()
+    os.mkdir(tmpfolder)
+    outputname = '%s.xml'%(template_j.name)
+    location = os.path.join(tmpfolder, outputname)
+
+    with open(location, 'w') as f:
+        f.write(template_xml_string)
+
+    app.logger.info("File export complete.")
+    
+    return send_from_directory(tmpfolder, outputname, as_attachment=True)

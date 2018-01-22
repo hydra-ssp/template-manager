@@ -53,3 +53,7 @@ input.error {
 tr.pending-delete{
     background-color: #f74242;
 }
+
+#import-select-container{
+    margin-top: 15px;
+}

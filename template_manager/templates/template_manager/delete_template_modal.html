@@ -1,0 +1,22 @@
+<div class="modal fade" tabindex="-1" role="dialog" id="delete_template_modal" data-keyboard="true" data-backdrop="modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">{{_('Delete')}} <p class="name"></p></h4>
+      </div>
+      <div class="modal-body">
+          <form id="delete-template" action="create_template" type="POST">
+                <input id="delete-template-id-input" type="hidden" name="template_id" value=""></input></td>
+                <input id="delete-template-name" type="hidden" name="template_name" value=""></input></td>
+
+                <p> {{_('Are you sure you want to delete template')}}  </p> <p class='name'></p>
+          </form>
+      </div>
+      <div class="modal-footer">
+          <button type="button" id="close-delete-template-button" class="btn btn-default" data-dismiss="modal">{{_('Close')}}</button>
+          <button type="button" id="delete-template-button" class="btn btn-danger">{{_('Delete')}}</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

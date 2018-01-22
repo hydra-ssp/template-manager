@@ -1,0 +1,25 @@
+<div class="modal fade" tabindex="-1" role="dialog" id="download_template_modal" data-keyboard="true" data-backdrop="modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">{{_('Download')}} <p class="name"></p></h4>
+      </div>
+      <div class="modal-body">
+          <form id="download-template" action="download_template" type="POST">
+              <label>{{_("Choose format")}}
+                <select id="download-format" name="format" class="selectpicker">
+                    <option value="XML">XML</option>
+                    <option value="json">JSON</option>
+                </select>
+
+                <input id="download-template-id-input" type="hidden" name="template_id" value=""></input>
+          </form>
+      </div>
+      <div class="modal-footer">
+          <button type="button" id="close-download-template-button" class="btn btn-default" data-dismiss="modal">{{_('Close')}}</button>
+          <button type="button" id="download-template-button" class="btn btn-primary">{{_('Download')}}</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
